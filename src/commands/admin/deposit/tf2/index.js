@@ -6,10 +6,10 @@ import messages from '../../../../config/messages.js';
 
 export default async (sender, msg) => {
   try {
-    const input = msg.toUpperCase();
+    const input = msg.toUpperCase().replace(/>/g, '').replace(/</g, '');
     const amountOfKeys = parseInt(input.replace('!DEPOSITTF ', ''), 10);
 
-    if (Number.isNaN(amountOfKeys) && amountOfKeys < 0) {
+    if (Number.isNaN(amountOfKeys) || amountOfKeys <= 0) {
       chatMessage(
         sender,
         messages.error.inputinvalid.keys.replace('{command}', `!DEPOSITTF 1`)
@@ -22,10 +22,7 @@ export default async (sender, msg) => {
 
     const keys = await getTF2KeyByAmount(sender.getSteamID64(), amountOfKeys);
 
-    const message = messages.trade.message.keys[0].replace(
-      '{KEYS}',
-      keys.length
-    );
+    const message = messages.trade.message.keys.replace('{KEYS}', keys.length);
 
     await makeOffer(
       sender.getSteamID64(),
@@ -45,12 +42,9 @@ export default async (sender, msg) => {
       error.message.includes('An error occurred while getting trade holds')
     ) {
       chatMessage(sender, messages.error.tradehold);
-      log.error(error.message);
-    } else if (
-      error.message.includes('An error occurred while sending trade offer')
-    ) {
-      chatMessage(sender, messages.error.sendtrade);
-      log.error(error.message);
+      log.error(
+        `An error occurred while getting trade holds: ${error.message}`
+      );
     } else if (error.message.indexOf('There is a trade holds') > -1) {
       chatMessage(sender, messages.tradeHold);
       log.error(`There is a trade holds: ${error.message}`);

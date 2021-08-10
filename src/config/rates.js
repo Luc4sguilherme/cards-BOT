@@ -2,156 +2,156 @@ export default {
   gems: {
     5: {
       regularCards: {
-        marketable: 66,
-        nomarketable: 56,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 90,
-        nomarketable: 80,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 198,
-        nomarketable: 168,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
     6: {
       regularCards: {
-        marketable: 55,
-        nomarketable: 46,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 75,
-        nomarketable: 66,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 165,
-        nomarketable: 138,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
     7: {
       regularCards: {
-        marketable: 47,
-        nomarketable: 40,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 64,
-        nomarketable: 57,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 141,
-        nomarketable: 120,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
     8: {
       regularCards: {
-        marketable: 41,
-        nomarketable: 35,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 56,
-        nomarketable: 50,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 123,
-        nomarketable: 105,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
     9: {
       regularCards: {
-        marketable: 36,
-        nomarketable: 31,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 50,
-        nomarketable: 44,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 108,
-        nomarketable: 93,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
     10: {
       regularCards: {
-        marketable: 33,
-        nomarketable: 28,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 45,
-        nomarketable: 40,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 99,
-        nomarketable: 84,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
     11: {
       regularCards: {
-        marketable: 30,
-        nomarketable: 25,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 40,
-        nomarketable: 36,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 90,
-        nomarketable: 75,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
     12: {
       regularCards: {
-        marketable: 27,
-        nomarketable: 23,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 37,
-        nomarketable: 33,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 81,
-        nomarketable: 69,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
     13: {
       regularCards: {
-        marketable: 25,
-        nomarketable: 21,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 34,
-        nomarketable: 30,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 75,
-        nomarketable: 63,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
     14: {
       regularCards: {
-        marketable: 23,
-        nomarketable: 20,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 32,
-        nomarketable: 28,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 69,
-        nomarketable: 60,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
     15: {
       regularCards: {
-        marketable: 22,
-        nomarketable: 18,
+        marketable: 0,
+        nomarketable: 0,
       },
       foilCards: {
-        marketable: 30,
-        nomarketable: 26,
+        marketable: 0,
+        nomarketable: 0,
       },
       boosterPacks: {
-        marketable: 66,
-        nomarketable: 54,
+        marketable: 0,
+        nomarketable: 0,
       },
     },
   },

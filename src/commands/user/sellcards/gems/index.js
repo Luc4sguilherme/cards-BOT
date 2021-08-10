@@ -1,40 +1,56 @@
 import chatMessage from '../../../../components/chatMessage.js';
-import { getGemsByAmount } from '../../../../components/inventory.js';
+import {
+  getGemsByAmount,
+  getUserSteamInventory,
+} from '../../../../components/inventory.js';
 import log from '../../../../components/log.js';
 import makeOffer from '../../../../components/makeOffer.js';
 import { client } from '../../../../components/steamClient.js';
 import messages from '../../../../config/messages.js';
+import prices from '../../../../config/rates.js';
 
-export default async (sender, msg) => {
+export default async (sender, currency) => {
   try {
-    const input = msg.toUpperCase().replace(/>/g, '').replace(/</g, '');
-    const amountOfGems = parseInt(input.replace('!WITHDRAWGEMS ', ''), 10);
+    log.userChat(sender.getSteamID64(), `[ !SELLCARDS ${currency} ]`);
+    chatMessage(sender, messages.request);
 
-    if (Number.isNaN(amountOfGems) || amountOfGems <= 0) {
-      chatMessage(
-        sender,
-        messages.error.inputinvalid.gems.replace('{command}', `!WITHDRAWGEMS 1`)
-      );
-      return;
+    const { regularCards } = await getUserSteamInventory(sender.getSteamID64());
+    const cards = [];
+    let amountOfGems = 0;
+
+    for (let i = 5; i <= 15; i += 1) {
+      for (let j = 0; j < regularCards.marketable[i].length; j += 1) {
+        cards.push(regularCards.marketable[i][j]);
+        amountOfGems += prices.gems[i].regularCards.marketable;
+      }
+
+      for (let j = 0; j < regularCards.nomarketable[i].length; j += 1) {
+        cards.push(regularCards.nomarketable[i][j]);
+        amountOfGems += prices.gems[i].regularCards.nomarketable;
+      }
     }
 
-    chatMessage(sender, messages.request);
-    log.adminChat(sender.getSteamID64(), `[ !WITHDRAWGEMS ${amountOfGems} ]`);
+    if (cards.length === 0) {
+      chatMessage(sender.getSteamID64(), messages.error.outofstock.cards.them);
+      return;
+    }
 
     const gems = await getGemsByAmount(
       client.steamID.getSteamID64(),
       amountOfGems
     );
 
-    const message = messages.trade.message.gems.replace('{GEMS}', amountOfGems);
+    const message = messages.trade.message.cards[1]
+      .replace('{CARDS}', cards.length)
+      .replace('{GEMS}', amountOfGems);
 
     await makeOffer(
       sender.getSteamID64(),
-      gems,
-      [],
-      '!WITHDRAWGEMS',
+      [...gems],
+      [...cards],
+      '!SELLCARDS',
       message,
-      0,
+      cards.length,
       0,
       amountOfGems,
       0

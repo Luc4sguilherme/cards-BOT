@@ -1,43 +1,59 @@
 import chatMessage from '../../../../components/chatMessage.js';
-import { getGemsByAmount } from '../../../../components/inventory.js';
+import {
+  getGemsByAmount,
+  getUserSteamInventory,
+} from '../../../../components/inventory.js';
 import log from '../../../../components/log.js';
 import makeOffer from '../../../../components/makeOffer.js';
 import { client } from '../../../../components/steamClient.js';
 import messages from '../../../../config/messages.js';
+import prices from '../../../../config/rates.js';
 
-export default async (sender, msg) => {
+export default async (sender, currency) => {
   try {
-    const input = msg.toUpperCase().replace(/>/g, '').replace(/</g, '');
-    const amountOfGems = parseInt(input.replace('!WITHDRAWGEMS ', ''), 10);
+    log.userChat(sender.getSteamID64(), `[ !SELLPACKS ${currency} ]`);
+    chatMessage(sender, messages.request);
 
-    if (Number.isNaN(amountOfGems) || amountOfGems <= 0) {
-      chatMessage(
-        sender,
-        messages.error.inputinvalid.gems.replace('{command}', `!WITHDRAWGEMS 1`)
-      );
-      return;
+    const { boosterPacks } = await getUserSteamInventory(sender.getSteamID64());
+    const packs = [];
+    let amountOfGems = 0;
+
+    for (let i = 5; i <= 15; i += 1) {
+      for (let j = 0; j < boosterPacks.marketable[i].length; j += 1) {
+        packs.push(boosterPacks.marketable[i][j]);
+        amountOfGems += prices.gems[i].boosterPacks.marketable;
+      }
+
+      for (let j = 0; j < boosterPacks.nomarketable[i].length; j += 1) {
+        packs.push(boosterPacks.nomarketable[i][j]);
+        amountOfGems += prices.gems[i].boosterPacks.nomarketable;
+      }
     }
 
-    chatMessage(sender, messages.request);
-    log.adminChat(sender.getSteamID64(), `[ !WITHDRAWGEMS ${amountOfGems} ]`);
+    if (packs.length === 0) {
+      chatMessage(sender.getSteamID64(), messages.error.outofstock.packs.them);
+      return;
+    }
 
     const gems = await getGemsByAmount(
       client.steamID.getSteamID64(),
       amountOfGems
     );
 
-    const message = messages.trade.message.gems.replace('{GEMS}', amountOfGems);
+    const message = messages.trade.message.packs[1]
+      .replace('{PACKS}', packs.length)
+      .replace('{GEMS}', amountOfGems);
 
     await makeOffer(
       sender.getSteamID64(),
-      gems,
-      [],
-      '!WITHDRAWGEMS',
+      [...gems],
+      [...packs],
+      '!SELLPACKS',
       message,
       0,
       0,
       amountOfGems,
-      0
+      packs.length
     );
   } catch (error) {
     if (error.message.includes('Insufficient number of gem(s)')) {

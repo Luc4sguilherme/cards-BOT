@@ -194,7 +194,7 @@ export default {
       }
 
       if (rel === 3) {
-        if (main.steamGroup.ID) {
+        if (main.steamGroup.ID && main.steamGroup.doInvites) {
           inviteToGroup(sender.getSteamID64());
         }
 

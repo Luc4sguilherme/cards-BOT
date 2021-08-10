@@ -6,10 +6,15 @@ import messages from '../../../config/messages.js';
 const SID64REGEX = new RegExp(/^[0-9]{17}$/);
 
 export default (sender, msg) => {
-  const id64 = msg.toUpperCase().replace('!UNBLOCK ', '').toString();
+  const id64 = msg
+    .toUpperCase()
+    .replace(/>/g, '')
+    .replace(/</g, '')
+    .replace('!UNBLOCK ', '')
+    .toString();
 
-  log.adminChat(sender.getSteamID64(), `[ !UNBLOCK ${id64} ]`);
   if (SID64REGEX.test(id64)) {
+    log.adminChat(sender.getSteamID64(), `[ !UNBLOCK ${id64} ]`);
     if (id64 !== sender.getSteamID64()) {
       client.unblockUser(id64, (err) => {
         if (err) {

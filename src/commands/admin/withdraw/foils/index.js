@@ -7,10 +7,10 @@ import messages from '../../../../config/messages.js';
 
 export default async (sender, msg) => {
   try {
-    const input = msg.toUpperCase();
+    const input = msg.toUpperCase().replace(/>/g, '').replace(/</g, '');
     const amountOfCards = parseInt(input.replace('!WITHDRAWFOILS ', ''), 10);
 
-    if (Number.isNaN(amountOfCards) && amountOfCards < 0) {
+    if (Number.isNaN(amountOfCards) || amountOfCards <= 0) {
       chatMessage(
         sender,
         messages.error.inputinvalid.foils.replace(
@@ -47,17 +47,14 @@ export default async (sender, msg) => {
     );
   } catch (error) {
     if (error.message.includes('Insufficient number of foil card(s)')) {
-      chatMessage(sender, messages.error.outofstock.cards.me);
+      chatMessage(sender, messages.error.outofstock.foils.me);
     } else if (
       error.message.includes('An error occurred while getting trade holds')
     ) {
       chatMessage(sender, messages.error.tradehold);
-      log.error(error.message);
-    } else if (
-      error.message.includes('An error occurred while sending trade offer')
-    ) {
-      chatMessage(sender, messages.error.sendtrade);
-      log.error(error.message);
+      log.error(
+        `An error occurred while getting trade holds: ${error.message}`
+      );
     } else if (error.message.indexOf('There is a trade holds') > -1) {
       chatMessage(sender, messages.tradeHold);
       log.error(`There is a trade holds: ${error.message}`);

@@ -3,8 +3,6 @@ export default {
 
   passWord: '',
 
-  steamID: '',
-
   sharedSecret: '',
 
   identitySecret: '',

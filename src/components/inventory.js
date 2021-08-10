@@ -17,20 +17,6 @@ export const stock = {
     tradable: 0,
     notradable: 0,
   },
-  booster: {
-    tradable: 0,
-    notradable: 0,
-  },
-  cards: {
-    regular: {
-      marketable: 0,
-      nomarketable: 0,
-    },
-    foil: {
-      marketable: 0,
-      nomarketable: 0,
-    },
-  },
 };
 
 export const filterBoosterPack = async (boosterPacks, marketable, size) => {
@@ -146,10 +132,8 @@ export const getTF2KeyByAmount = async (id64, amount) => {
 
 export const getGemsByAmount = async (id64, amount) => {
   const inventory = await getInventory(id64, 753, 6);
-  const Gems = await getGems(inventory);
-
+  const gems = await getGems(inventory);
   const gemsToSend = [];
-  const gems = Gems;
 
   let amountOfGems = 0;
   let need = amount;
@@ -375,7 +359,7 @@ export const updateStock = async (offer) => {
     add('TF2');
   }
 
-  if (offer.message.search(/gem/i) !== -1) {
+  if (offer.message.search(/gem|gems/i) !== -1) {
     add('GEMS');
   }
 

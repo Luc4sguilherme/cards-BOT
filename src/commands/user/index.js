@@ -18,7 +18,7 @@ export default (sender, msg) => {
 
   if (isValidCommand(input, '!BOTS')) {
     bots(sender);
-  } else if (isValidCommand(input, '!COMMANDS')) {
+  } else if (isValidCommand(input, '!COMMAND | !COMMANDS')) {
     commands(sender);
   } else if (isValidCommand(input, '!HELP')) {
     help(sender);
@@ -26,18 +26,18 @@ export default (sender, msg) => {
     stats(sender);
   } else if (isValidCommand(input, '!OWNER')) {
     owner(sender);
-  } else if (isValidCommand(input, '!PRICES | !PRICE | !RATES | !RATE')) {
-    prices(sender);
+  } else if (isValidCommand(input, '!PRICE | !PRICES | !RATE | !RATES')) {
+    prices(sender, msg);
   } else if (isValidCommand(input, '!SELLALL')) {
-    sellall(sender);
+    sellall(sender, msg);
   } else if (isValidCommand(input, '!SELLCARDS')) {
-    sellcards(sender);
+    sellcards(sender, msg);
   } else if (isValidCommand(input, '!SELLCHECK')) {
-    sellcheck(sender);
+    sellcheck(sender, msg);
   } else if (isValidCommand(input, '!SELLFOILS')) {
-    sellfoils(sender);
+    sellfoils(sender, msg);
   } else if (isValidCommand(input, '!SELLPACKS')) {
-    sellpacks(sender);
+    sellpacks(sender, msg);
   } else if (isValidCommand(input, '!SUPPORT')) {
     support(sender, msg);
   } else {

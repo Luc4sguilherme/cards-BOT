@@ -37,7 +37,7 @@ export default (sender, msg) => {
     depositFoils(sender, msg);
   } else if (isValidCommand(input, '!DEPOSITGEMS')) {
     depositGems(sender, msg);
-  } else if (isValidCommand(input, '!DEPOSITBOOSTER | !DEPOSITPACKS')) {
+  } else if (isValidCommand(input, '!DEPOSITPACKS')) {
     depositPacks(sender, msg);
   } else if (isValidCommand(input, '!DEPOSITTF')) {
     depositTF(sender, msg);
@@ -57,7 +57,7 @@ export default (sender, msg) => {
     withdrawFoils(sender, msg);
   } else if (isValidCommand(input, '!WITHDRAWGEMS')) {
     withdrawGems(sender, msg);
-  } else if (isValidCommand(input, '!WITHDRAWBOOSTER | !WITHDRAWPACKS')) {
+  } else if (isValidCommand(input, '!WITHDRAWPACKS')) {
     withdrawPacks(sender, msg);
   } else if (isValidCommand(input, '!WITHDRAWTF')) {
     withdrawTF(sender, msg);

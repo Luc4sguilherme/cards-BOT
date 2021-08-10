@@ -8,7 +8,7 @@ export const getUserData = async (id64) => {
     const users = JSON.parse(await readFileAsync('./data/users.json'));
     const user = users[id64];
 
-    return JSON.parse(user);
+    return user;
   } catch (error) {
     throw new Error(error);
   }

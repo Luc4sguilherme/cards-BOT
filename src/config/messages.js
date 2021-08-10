@@ -3,8 +3,8 @@ export default {
     '[EN] Welcome to my Trading Service, thank you for choosing me. Quick Start: Type !COMMANDS via SteamChat \n\n',
 
   help:
-    'This is an exchange bot, you can easly trade your random cards, foil, and booster packs for gems! \n' +
-    'If you want to sell only a specific card, booster pack or Foils card, send me an Trade offer following the current prices of the bot, use !rate to see. \n' +
+    'This is an exchange bot, you can easly trade your random cards, foil, and booster packs! \n' +
+    'If you want to sell only a specific card, booster pack or Foils card, send me an Trade offer following the current prices of the bot, use !rate <currency> to see. \n' +
     'If you want to sell all your inventory you can use the commands below. \n' +
     '• You may type !commands for the list of commands :)',
 
@@ -24,35 +24,47 @@ export default {
   trade: {
     message: {
       gems: 'Here are {GEMS} Gem(s).',
-      everything: 'Here are {GEMS} gem(s) in exchange everything',
+      keys: 'Here are {KEYS} Key(s).',
+      everything: {
+        0: 'Here are {GEMS} gem(s) in exchange everything',
+        1: 'Here are {KEYS} TF2 key(s) in exchange everything',
+      },
       cards: {
         0: 'Here are {CARDS} card(s).',
         1: 'Here are {GEMS} gem(s) in exchange {CARDS} card(s)',
-      },
-      tf: {
-        0: 'Here are {KEYS} TF Key(s).',
-        1: 'Here are {GEMS} gem(s) in exchange {KEYS} TF Key(s)',
+        2: 'Here are {KEYS} TF2 key(s) in exchange {CARDS} card(s)',
       },
       packs: {
         0: 'Here are {PACKS} Booster Pack(s).',
         1: 'Here are {GEMS} gem(s) in exchange {PACKS} Booster Pack(s)',
-      },
-      keys: {
-        0: 'Here are {KEYS} Key(s).',
-        1: 'Here are {GEMS} gem(s) in exchange {KEYS} Key(s)',
+        2: 'Here are {KEYS} TF2 key(s) in exchange {PACKS} Booster Pack(s)',
       },
     },
     notifyAdmin: {
       all: {
-        0: 'Trade completed with {CARDS} Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
-        1: 'Trade completed with {PACKS} Booster Pack(s) and {CARDS} Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
+        gems: {
+          0: 'Trade completed with {CARDS} Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
+          1: 'Trade completed with {PACKS} Booster Pack(s) and {CARDS} Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
+        },
+        tf: {
+          0: 'Trade completed with {CARDS} Card(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
+          1: 'Trade completed with {PACKS} Booster Pack(s) and {CARDS} Card(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
+        },
       },
-      cards:
-        'Trade completed with {CARDS} Regular Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
-      foils:
-        'Trade completed with {FOILS} foil Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
-      packs:
-        'Trade completed with {PACKS} Booster Pack(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
+      cards: {
+        gems: 'Trade completed with {CARDS} Regular Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
+        tf: 'Trade completed with {CARDS} Regular Card(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
+      },
+
+      foils: {
+        gems: 'Trade completed with {FOILS} foil Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
+        tf: 'Trade completed with {FOILS} foil Card(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
+      },
+
+      packs: {
+        gems: 'Trade completed with {PACKS} Booster Pack(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
+        tf: 'Trade completed with {PACKS} Booster Pack(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
+      },
     },
     check: 'Please check your Trade and accept it to receive your Items.',
     done: {
@@ -81,6 +93,9 @@ export default {
       'An error occurred while canceling your offers. Please try again later!',
     nonexistentoffer:
       'Offer with ID:{OFFERID} is not active, so it may not be cancelled.',
+    missingInput: {
+      currency: 'Missing currency',
+    },
     inputinvalid: {
       cards: 'Please provide a valid amount of cards - example: {command}',
       keys: 'Please provide a valid amount of keys - example: {command}',
@@ -91,6 +106,7 @@ export default {
       packs:
         'Please provide a valid amount of booster pack - example: {command}',
       steamid64: 'Please provide a valid SteamID64',
+      currency: 'Invalid currency',
     },
     commandUnknow:
       'Command not recognized. Use !COMMANDS to see how this bot works.',
@@ -111,7 +127,7 @@ export default {
       },
       cards: {
         them: 'Unfortunately, you currently do not have enough regular cards to complete this request.',
-        me: "I don't have enough foils cards to complete this request.",
+        me: "I don't have enough regular cards to complete this request.",
       },
       foils: {
         them: 'Unfortunately, you currently do not have enough foils cards to complete this request.',
@@ -125,7 +141,7 @@ export default {
         them: 'Unfortunately, you currently do not have enough gems to complete this request.',
         me: "I don't have enough gems to complete this request.",
       },
-      booster: {
+      packs: {
         them: 'Unfortunately, you currently do not have enough booster packs to complete this request.',
         me: "I don't have enough Booster Pack to complete this request.",
       },
@@ -163,16 +179,17 @@ export default {
 
   commands:
     'Commands: \n' +
-    '• !help - Useful information \n' +
+    '• !help - Useful information. \n' +
     '• !owner - display my owners steam profile, if you have any major issues you can contact my owner! \n' +
     '• !bots - display our full list of available bots. \n\n' +
-    '• !stats - show how much gems available the bot have \n' +
-    '• !prices - show our current rates \n\n' +
-    '• !sellcheck - shows how many available cards/foils/packs you have, and how much gems you would get. \n' +
-    '• !sellall - exchange everything you have available to sell for gems, following bot rates \n\n' +
-    '• !sellcards - exchange your regular cards for gems, following bot rates. \n' +
-    '• !sellfoils -  exchange your foil cards for gems, following bot rates. \n' +
-    '• !sellpacks -  exchange your booster packs for gems, following bot rates. \n',
+    '• !stats - show how much gems available the bot have. \n' +
+    '• !prices <currency> - show our current rates. \n\n' +
+    '• !sellcheck <currency> - shows how many available cards/foils/packs you have that I can buy. \n' +
+    '• !sellall <currency> - sell everything you have available, following bot rates. \n\n' +
+    '• !sellcards <currency> - sell your regular cards, following bot rates. \n' +
+    '• !sellfoils <currency> - sell your foil cards, following bot rates. \n' +
+    '• !sellpacks <currency> - sell your booster packs, following bot rates. \n\n\n' +
+    '============> <currency> is one of: TF2, GEMS <============',
 
   adminCommands: [
     'Commands: \n',
@@ -180,20 +197,20 @@ export default {
     '► !AUTHCODE = Shows auth code. \n',
     '► !DIE = Turn off the bot. \n',
     '► !RESTART = Restart the bot. \n',
-    '► !CANCEL (OFFERID) = Cancel the trade offer. \n',
+    '► !CANCEL <OFFERID> = Cancel the trade offer. \n',
     '► !UNPACK = Unpack all boosters. \n',
-    '► !BLOCK (ID64) = Block user. \n',
-    '► !UNBLOCK (ID64) = Unlock user. \n',
-    '► !WITHDRAWCARDS = Withdraw a specific amount of regular cards. \n',
-    '► !WITHDRAWFOILS = Withdraw a specific amount of foil cards. \n',
-    '► !WITHDRAWBOOSTER = Withdraw a specific amount of booster packs. \n',
-    '► !WITHDRAWTF = Withdraw a specific amount of hydra keys. \n',
-    '► !WITHDRAWGEMS = Withdraw a specific amount of gems. \n',
-    '► !DEPOSITCARDS = Deposits a specific amount of regular cards. \n',
-    '► !DEPOSITFOILS = Deposits a specific amount of foil cards. \n',
-    '► !DEPOSITBOOSTER = Deposits a specific amount of booster packs. \n',
-    '► !DEPOSITTF = Deposits a specific amount of tf2 keys. \n',
-    '► !DEPOSITGEMS = Deposits a specific amount of gems. \n',
+    '► !BLOCK <ID64> = Block user. \n',
+    '► !UNBLOCK <ID64> = Unlock user. \n',
+    '► !WITHDRAWCARDS <amount> = Withdraw a specific amount of regular cards. \n',
+    '► !WITHDRAWFOILS <amount> = Withdraw a specific amount of foil cards. \n',
+    '► !WITHDRAWPACKS <amount> = Withdraw a specific amount of booster packs. \n',
+    '► !WITHDRAWTF <amount> = Withdraw a specific amount of hydra keys. \n',
+    '► !WITHDRAWGEMS <amount> = Withdraw a specific amount of gems. \n',
+    '► !DEPOSITCARDS <amount> = Deposits a specific amount of regular cards. \n',
+    '► !DEPOSITFOILS <amount> = Deposits a specific amount of foil cards. \n',
+    '► !DEPOSITPACKS <amount> = Deposits a specific amount of booster packs. \n',
+    '► !DEPOSITTF <amount> = Deposits a specific amount of tf2 keys. \n',
+    '► !DEPOSITGEMS <amount> = Deposits a specific amount of gems. \n',
   ],
 
   rates:

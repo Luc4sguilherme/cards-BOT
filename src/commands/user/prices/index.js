@@ -1,32 +1,34 @@
 import chatMessage from '../../../components/chatMessage.js';
-import log from '../../../components/log.js';
+import isAcceptedCurrency from '../../../components/isAcceptedCurrency.js';
 import messages from '../../../config/messages.js';
-import prices from '../../../config/rates.js';
+import sellpricesgems from './gems/index.js';
+import sellpricestf from './tf/index.js';
 
-export default (sender) => {
-  log.userChat(sender.getSteamID64(), `[ !PRICES ]`);
-  chatMessage(sender, messages.request);
+export default (sender, msg) => {
+  const input = msg.toUpperCase().replace(/>/g, '').replace(/</g, '');
+  const command =
+    input.match('!PRICES') ||
+    input.match('!PRICE') ||
+    input.match('!RATES') ||
+    input.match('!RATE') ||
+    [];
+  const currency = input.replace(`${command[0]}`, '').trim();
 
-  let regularCards = '';
-  let foilCards = '';
-  let boosterPack = '';
-
-  for (let i = 5; i <= 15; i += 1) {
-    regularCards += ` • 1 Regular Card (sets of ${i}): Marketable: ${prices.gems[i].regularCards.marketable} Gems | Non-Marketable: ${prices.gems[i].regularCards.nomarketable} Gems \n `;
-    foilCards += ` • 1 Foil Card (sets of ${i}): Marketable: ${prices.gems[i].foilCards.marketable} Gems | Non-Marketable: ${prices.gems[i].foilCards.nomarketable} Gems \n `;
-    boosterPack += ` • 1 Booster Pack (sets of ${i}): Marketable: ${prices.gems[i].boosterPacks.marketable} Gems | Non-Marketable: ${prices.gems[i].boosterPacks.nomarketable} Gems \n `;
-
-    if (i === 15) {
-      regularCards += '\n ';
-      foilCards += '\n ';
-      boosterPack += '\n ';
-    }
+  if (!currency.length) {
+    chatMessage(sender, messages.error.missingInput.currency);
+    return;
   }
 
-  const msg = messages.rates
-    .replace('{regular_cards}', regularCards)
-    .replace('{foil_cards}', foilCards)
-    .replace('{booster_pack}', boosterPack);
+  if (!isAcceptedCurrency(currency)) {
+    chatMessage(sender, messages.error.inputinvalid.currency);
+    return;
+  }
 
-  chatMessage(sender, `/pre ${msg}`);
+  if (currency === 'GEMS') {
+    sellpricesgems(sender, currency);
+  }
+
+  if (currency === 'TF2') {
+    sellpricestf(sender, currency);
+  }
 };
