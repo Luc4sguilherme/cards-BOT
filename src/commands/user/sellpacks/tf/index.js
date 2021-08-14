@@ -1,14 +1,15 @@
 /* eslint-disable eqeqeq */
+import calculatePrices from '../../../../components/calculatePrices.js';
 import chatMessage from '../../../../components/chatMessage.js';
 import {
   getTF2KeyByAmount,
   getUserSteamInventory,
+  stock,
 } from '../../../../components/inventory.js';
 import log from '../../../../components/log.js';
 import makeOffer from '../../../../components/makeOffer.js';
 import { client } from '../../../../components/steamClient.js';
 import messages from '../../../../config/messages.js';
-import prices from '../../../../config/rates.js';
 
 export default async (sender, currency) => {
   try {
@@ -17,30 +18,36 @@ export default async (sender, currency) => {
 
     const { boosterPacks } = await getUserSteamInventory(sender.getSteamID64());
     const packs = [];
-    let amountOfKeys = 0;
+    let totalCost = 0;
 
     for (let i = 5; i <= 15; i += 1) {
-      amountOfKeys +=
+      totalCost +=
         boosterPacks.marketable[i].length /
-        prices.tf[i].boosterPacks.marketable;
+        calculatePrices(i, 'TF2', 'PACKS', true);
 
-      amountOfKeys +=
+      totalCost +=
         boosterPacks.nomarketable[i].length /
-        prices.tf[i].boosterPacks.nomarketable;
+        calculatePrices(i, 'TF2', 'PACKS', false);
     }
 
-    amountOfKeys = Number.parseInt(amountOfKeys, 10);
+    totalCost = Number.parseInt(totalCost, 10);
 
-    let need = amountOfKeys;
+    if (stock.tf.tradable > 0) {
+      if (totalCost > stock.tf.tradable) {
+        totalCost = stock.tf.tradable;
+      }
+    }
+    const amountOfKeys = totalCost;
+
     for (let i = 5; i <= 15; i += 1) {
       for (let j = 0; j < boosterPacks.marketable[i].length; j += 1) {
         const numberOfDigits = String(
-          prices.tf[i].boosterPacks.marketable
+          calculatePrices(i, 'TF2', 'PACKS', true)
         ).length;
 
-        if (need.toFixed(numberOfDigits) > 0) {
+        if (totalCost.toFixed(numberOfDigits) > 0) {
           packs.push(boosterPacks.marketable[i][j]);
-          need -= 1 / prices.tf[i].boosterPacks.marketable;
+          totalCost -= 1 / calculatePrices(i, 'TF2', 'PACKS', true);
         } else {
           break;
         }
@@ -48,13 +55,13 @@ export default async (sender, currency) => {
 
       for (let j = 0; j < boosterPacks.nomarketable[i].length; j += 1) {
         const numberOfDigits = String(
-          prices.tf[i].boosterPacks.nomarketable
+          calculatePrices(i, 'TF2', 'PACKS', false)
         ).length;
 
-        if (need.toFixed(numberOfDigits) > 0) {
+        if (totalCost.toFixed(numberOfDigits) > 0) {
           packs.push(boosterPacks.nomarketable[i][j]);
 
-          need -= 1 / prices.tf[i].boosterPacks.nomarketable;
+          totalCost -= 1 / calculatePrices(i, 'TF2', 'PACKS', false);
         } else {
           break;
         }

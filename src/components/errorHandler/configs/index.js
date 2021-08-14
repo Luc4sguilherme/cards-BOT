@@ -1,7 +1,10 @@
 import Joi from 'joi';
 
 import main from '../../../config/main.js';
-import rates from '../../../config/rates.js';
+import marketableGemsRates from '../../../config/rates/gems/marketable.js';
+import noMarketableGemsRates from '../../../config/rates/gems/nomarketable.js';
+import marketableTF2Rates from '../../../config/rates/tf2/marketable.js';
+import noMarketableTF2Rates from '../../../config/rates/tf2/nomarketable.js';
 
 function validate() {
   const schemaMain = Joi.object().keys({
@@ -29,319 +32,120 @@ function validate() {
     }),
   });
 
-  const schemaRates = Joi.object({
-    gems: {
-      5: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      6: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      7: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      8: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      9: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      10: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      11: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      12: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      13: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      14: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      15: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-    },
-    tf: {
-      5: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      6: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      7: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      8: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      9: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      10: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      11: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      12: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      13: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      14: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-      15: Joi.object().keys({
-        regularCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        foilCards: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-        boosterPacks: Joi.object().keys({
-          marketable: Joi.number().integer().positive().required(),
-          nomarketable: Joi.number().integer().positive().required(),
-        }),
-      }),
-    },
+  const schemaMarketableGemsRates = Joi.object({
+    cards: Joi.object().keys({
+      5: Joi.number().integer().positive().required(),
+      6: Joi.number().integer().positive().required(),
+      7: Joi.number().integer().positive().required(),
+      8: Joi.number().integer().positive().required(),
+      9: Joi.number().integer().positive().required(),
+      10: Joi.number().integer().positive().required(),
+      11: Joi.number().integer().positive().required(),
+      12: Joi.number().integer().positive().required(),
+      13: Joi.number().integer().positive().required(),
+      14: Joi.number().integer().positive().required(),
+      15: Joi.number().integer().positive().required(),
+    }),
+    foils: Joi.object().keys({
+      5: Joi.number().integer().positive().required(),
+      6: Joi.number().integer().positive().required(),
+      7: Joi.number().integer().positive().required(),
+      8: Joi.number().integer().positive().required(),
+      9: Joi.number().integer().positive().required(),
+      10: Joi.number().integer().positive().required(),
+      11: Joi.number().integer().positive().required(),
+      12: Joi.number().integer().positive().required(),
+      13: Joi.number().integer().positive().required(),
+      14: Joi.number().integer().positive().required(),
+      15: Joi.number().integer().positive().required(),
+    }),
+  });
+
+  const schemaNoMarketableGemsRates = Joi.object({
+    cards: Joi.object().keys({
+      5: Joi.number().integer().positive().required(),
+      6: Joi.number().integer().positive().required(),
+      7: Joi.number().integer().positive().required(),
+      8: Joi.number().integer().positive().required(),
+      9: Joi.number().integer().positive().required(),
+      10: Joi.number().integer().positive().required(),
+      11: Joi.number().integer().positive().required(),
+      12: Joi.number().integer().positive().required(),
+      13: Joi.number().integer().positive().required(),
+      14: Joi.number().integer().positive().required(),
+      15: Joi.number().integer().positive().required(),
+    }),
+    foils: Joi.object().keys({
+      5: Joi.number().integer().positive().required(),
+      6: Joi.number().integer().positive().required(),
+      7: Joi.number().integer().positive().required(),
+      8: Joi.number().integer().positive().required(),
+      9: Joi.number().integer().positive().required(),
+      10: Joi.number().integer().positive().required(),
+      11: Joi.number().integer().positive().required(),
+      12: Joi.number().integer().positive().required(),
+      13: Joi.number().integer().positive().required(),
+      14: Joi.number().integer().positive().required(),
+      15: Joi.number().integer().positive().required(),
+    }),
+  });
+
+  const schemaMarketableTF2Rates = Joi.object({
+    cards: Joi.object().keys({
+      5: Joi.number().integer().positive().required(),
+      6: Joi.number().integer().positive().required(),
+      7: Joi.number().integer().positive().required(),
+      8: Joi.number().integer().positive().required(),
+      9: Joi.number().integer().positive().required(),
+      10: Joi.number().integer().positive().required(),
+      11: Joi.number().integer().positive().required(),
+      12: Joi.number().integer().positive().required(),
+      13: Joi.number().integer().positive().required(),
+      14: Joi.number().integer().positive().required(),
+      15: Joi.number().integer().positive().required(),
+    }),
+    foils: Joi.object().keys({
+      5: Joi.number().integer().positive().required(),
+      6: Joi.number().integer().positive().required(),
+      7: Joi.number().integer().positive().required(),
+      8: Joi.number().integer().positive().required(),
+      9: Joi.number().integer().positive().required(),
+      10: Joi.number().integer().positive().required(),
+      11: Joi.number().integer().positive().required(),
+      12: Joi.number().integer().positive().required(),
+      13: Joi.number().integer().positive().required(),
+      14: Joi.number().integer().positive().required(),
+      15: Joi.number().integer().positive().required(),
+    }),
+  });
+
+  const schemaNoMarketableTF2Rates = Joi.object({
+    cards: Joi.object().keys({
+      5: Joi.number().integer().positive().required(),
+      6: Joi.number().integer().positive().required(),
+      7: Joi.number().integer().positive().required(),
+      8: Joi.number().integer().positive().required(),
+      9: Joi.number().integer().positive().required(),
+      10: Joi.number().integer().positive().required(),
+      11: Joi.number().integer().positive().required(),
+      12: Joi.number().integer().positive().required(),
+      13: Joi.number().integer().positive().required(),
+      14: Joi.number().integer().positive().required(),
+      15: Joi.number().integer().positive().required(),
+    }),
+    foils: Joi.object().keys({
+      5: Joi.number().integer().positive().required(),
+      6: Joi.number().integer().positive().required(),
+      7: Joi.number().integer().positive().required(),
+      8: Joi.number().integer().positive().required(),
+      9: Joi.number().integer().positive().required(),
+      10: Joi.number().integer().positive().required(),
+      11: Joi.number().integer().positive().required(),
+      12: Joi.number().integer().positive().required(),
+      13: Joi.number().integer().positive().required(),
+      14: Joi.number().integer().positive().required(),
+      15: Joi.number().integer().positive().required(),
+    }),
   });
 
   const { error: errorMain } = schemaMain.validate(main, {
@@ -349,10 +153,31 @@ function validate() {
     abortEarly: false,
   });
 
-  const { error: errorRates } = schemaRates.validate(rates, {
-    convert: false,
-    abortEarly: false,
-  });
+  const { error: errorMarketableGemsRates } =
+    schemaMarketableGemsRates.validate(marketableGemsRates, {
+      convert: false,
+      abortEarly: false,
+    });
+
+  const { error: errorNoMarketableGemsRates } =
+    schemaNoMarketableGemsRates.validate(noMarketableGemsRates, {
+      convert: false,
+      abortEarly: false,
+    });
+
+  const { error: errorMarketableTF2Rates } = schemaMarketableTF2Rates.validate(
+    marketableTF2Rates,
+    {
+      convert: false,
+      abortEarly: false,
+    }
+  );
+
+  const { error: errorNoMarketableTF2Rates } =
+    schemaNoMarketableTF2Rates.validate(noMarketableTF2Rates, {
+      convert: false,
+      abortEarly: false,
+    });
 
   if (errorMain) {
     const errors = errorMain.details.map((detail) => detail.message).join(', ');
@@ -362,13 +187,43 @@ function validate() {
     );
   }
 
-  if (errorRates) {
-    const errors = errorRates.details
+  if (errorMarketableGemsRates) {
+    const errors = errorMarketableGemsRates.details
       .map((detail) => detail.message)
       .join(', ');
 
     throw new Error(
-      `There are errors in the rates configuration file: ${errors}.`
+      `There are errors in the marketable gems rates configuration file: ${errors}.`
+    );
+  }
+
+  if (errorNoMarketableGemsRates) {
+    const errors = errorNoMarketableGemsRates.details
+      .map((detail) => detail.message)
+      .join(', ');
+
+    throw new Error(
+      `There are errors in the non-marketable gems rates configuration file: ${errors}.`
+    );
+  }
+
+  if (errorMarketableTF2Rates) {
+    const errors = errorMarketableTF2Rates.details
+      .map((detail) => detail.message)
+      .join(', ');
+
+    throw new Error(
+      `There are errors in the marketable TF2 rates configuration file: ${errors}.`
+    );
+  }
+
+  if (errorNoMarketableTF2Rates) {
+    const errors = errorNoMarketableTF2Rates.details
+      .map((detail) => detail.message)
+      .join(', ');
+
+    throw new Error(
+      `There are errors in the non-marketable TF2 rates configuration file: ${errors}.`
     );
   }
 }

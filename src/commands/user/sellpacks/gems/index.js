@@ -1,13 +1,14 @@
+import calculatePrices from '../../../../components/calculatePrices.js';
 import chatMessage from '../../../../components/chatMessage.js';
 import {
   getGemsByAmount,
   getUserSteamInventory,
+  stock,
 } from '../../../../components/inventory.js';
 import log from '../../../../components/log.js';
 import makeOffer from '../../../../components/makeOffer.js';
 import { client } from '../../../../components/steamClient.js';
 import messages from '../../../../config/messages.js';
-import prices from '../../../../config/rates.js';
 
 export default async (sender, currency) => {
   try {
@@ -16,17 +17,48 @@ export default async (sender, currency) => {
 
     const { boosterPacks } = await getUserSteamInventory(sender.getSteamID64());
     const packs = [];
-    let amountOfGems = 0;
+    let totalCost = 0;
 
     for (let i = 5; i <= 15; i += 1) {
       for (let j = 0; j < boosterPacks.marketable[i].length; j += 1) {
-        packs.push(boosterPacks.marketable[i][j]);
-        amountOfGems += prices.gems[i].boosterPacks.marketable;
+        totalCost += calculatePrices(i, 'GEMS', 'PACKS', true);
       }
 
       for (let j = 0; j < boosterPacks.nomarketable[i].length; j += 1) {
-        packs.push(boosterPacks.nomarketable[i][j]);
-        amountOfGems += prices.gems[i].boosterPacks.nomarketable;
+        totalCost += calculatePrices(i, 'GEMS', 'PACKS', false);
+      }
+    }
+
+    if (stock.gems.tradable > 0) {
+      if (totalCost > stock.gems.tradable) {
+        totalCost = stock.gems.tradable;
+      }
+    }
+
+    let amountOfGems = 0;
+    for (let i = 5; i <= 15; i += 1) {
+      for (let j = 0; j < boosterPacks.marketable[i].length; j += 1) {
+        const price = calculatePrices(i, 'GEMS', 'PACKS', true);
+
+        if (totalCost >= price) {
+          packs.push(boosterPacks.marketable[i][j]);
+          totalCost -= price;
+          amountOfGems += price;
+        } else {
+          break;
+        }
+      }
+
+      for (let j = 0; j < boosterPacks.nomarketable[i].length; j += 1) {
+        const price = calculatePrices(i, 'GEMS', 'PACKS', false);
+
+        if (totalCost >= price) {
+          packs.push(boosterPacks.nomarketable[i][j]);
+          totalCost -= price;
+          amountOfGems += price;
+        } else {
+          break;
+        }
       }
     }
 

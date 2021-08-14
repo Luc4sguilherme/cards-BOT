@@ -24,7 +24,7 @@ export default {
   trade: {
     message: {
       gems: 'Here are {GEMS} Gem(s).',
-      keys: 'Here are {KEYS} Key(s).',
+      keys: 'Here are {KEYS} TF2 Key(s).',
       everything: {
         0: 'Here are {GEMS} gem(s) in exchange everything',
         1: 'Here are {KEYS} TF2 key(s) in exchange everything',
@@ -75,7 +75,7 @@ export default {
       'You tried to send a counter offer, trade will be canceled. TradeID:{OFFERID}',
     expired: 'Tradeoffer expired. TradeID:{OFFERID}',
     canceled: {
-      0: 'Trade offer with ID:{OFFERID} canceled.',
+      0: 'Trade offer canceled. TradeID:{OFFERID}',
       1: 'The trade offer canceled because the items were not available. TradeID:{OFFERID}',
     },
     declined: {
@@ -94,7 +94,9 @@ export default {
     nonexistentoffer:
       'Offer with ID:{OFFERID} is not active, so it may not be cancelled.',
     missingInput: {
-      currency: 'Missing currency',
+      currency:
+        'Please specify the currency you want negotiate. One of: TF2, GEMS \n',
+      message: 'Please provide a message',
     },
     inputinvalid: {
       cards: 'Please provide a valid amount of cards - example: {command}',
@@ -106,7 +108,7 @@ export default {
       packs:
         'Please provide a valid amount of booster pack - example: {command}',
       steamid64: 'Please provide a valid SteamID64',
-      currency: 'Invalid currency',
+      currency: 'Please provide a valid currency. One of: TF2, GEMS \n',
     },
     commandUnknow:
       'Command not recognized. Use !COMMANDS to see how this bot works.',
@@ -201,10 +203,11 @@ export default {
     '► !UNPACK = Unpack all boosters. \n',
     '► !BLOCK <ID64> = Block user. \n',
     '► !UNBLOCK <ID64> = Unlock user. \n',
+    '► !BROADCAST <message> = Send a message to all friends. \n',
     '► !WITHDRAWCARDS <amount> = Withdraw a specific amount of regular cards. \n',
     '► !WITHDRAWFOILS <amount> = Withdraw a specific amount of foil cards. \n',
     '► !WITHDRAWPACKS <amount> = Withdraw a specific amount of booster packs. \n',
-    '► !WITHDRAWTF <amount> = Withdraw a specific amount of hydra keys. \n',
+    '► !WITHDRAWTF <amount> = Withdraw a specific amount of tf2 keys. \n',
     '► !WITHDRAWGEMS <amount> = Withdraw a specific amount of gems. \n',
     '► !DEPOSITCARDS <amount> = Deposits a specific amount of regular cards. \n',
     '► !DEPOSITFOILS <amount> = Deposits a specific amount of foil cards. \n',

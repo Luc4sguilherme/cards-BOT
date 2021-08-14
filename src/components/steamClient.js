@@ -10,6 +10,6 @@ export const manager = new TradeOfferManager({
   community,
   language: 'en',
   pollInterval: moment.duration(1, 'seconds'),
-  cancelTime: moment.duration(5, 'minutes'),
+  cancelTime: moment.duration(1, 'hours'),
   savePollData: true,
 });

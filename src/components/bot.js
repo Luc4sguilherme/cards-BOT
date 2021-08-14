@@ -12,6 +12,7 @@ import { loadInventory, updateStock } from './inventory.js';
 import inviteToGroup from './inviteToGroup.js';
 import isLoadingInventory from './isLoadingInventory.js';
 import log from './log.js';
+import manualTradeOffer from './manualTradeOffer.js';
 import notifyAdmin from './notifyAdmin.js';
 import refuseGroupInvites from './refuseGroupInvites.js';
 import { client, community, manager } from './steamClient.js';
@@ -203,58 +204,150 @@ export default {
     });
 
     manager.on('newOffer', (offer) => {
-      if (main.admins.includes(offer.partner.getSteamID64())) {
-        offer.getUserDetails((error1, me, them) => {
-          if (error1) {
-            log.error(`An error occurred while getting trade holds: ${error1}`);
-            chatMessage(offer.partner, messages.error.tradehold);
-            offer.decline((error2) => {
-              if (error2) {
-                log.error(`An error occurred while declining trade: ${error2}`);
-              }
-            });
-          } else if (me.escrowDays === 0 && them.escrowDays === 0) {
+      offer.getUserDetails((error1, me, them) => {
+        if (error1) {
+          log.error(
+            `An error occurred while getting trade holds: ${error1.message}`
+          );
+          chatMessage(offer.partner, messages.error.tradehold);
+          offer.decline((error2) => {
+            if (error2) {
+              log.error(
+                `An error occurred while declining trade: ${error2.message}`
+              );
+            }
+          });
+        } else if (me.escrowDays === 0 && them.escrowDays === 0) {
+          if (main.admins.includes(offer.partner.getSteamID64())) {
             offer.accept((error3) => {
               if (error3) {
-                log.error(`An error occurred while accepting trade: ${error3}`);
+                log.error(
+                  `An error occurred while accepting trade: ${error3.message}`
+                );
                 offer.decline((error4) => {
                   if (error4) {
                     log.error(
-                      `An error occurred while accepting trade: ${error4}`
+                      `An error occurred while accepting trade: ${error4.message}`
                     );
                   }
                 });
-              } else {
-                chatMessage(
-                  offer.partner,
-                  messages.trade.accepted.replace('{OFFERID}', offer.id)
+              }
+            });
+          } else if (offer.itemsToGive.length === 0) {
+            offer.decline((error5) => {
+              if (error5) {
+                log.error(
+                  `An error occurred while declining trade: ${error5.message}`
+                );
+              }
+            });
+          } else if (offer.itemsToReceive.length === 0) {
+            offer.decline((error6) => {
+              if (error6) {
+                log.error(
+                  `An error occurred while declining trade: ${error6.message}`
                 );
               }
             });
           } else {
-            chatMessage(offer.partner, messages.tradeHold);
-            offer.decline((error5) => {
-              if (error5) {
-                log.error(`An error occurred while declining trade: ${error5}`);
-              }
-            });
+            manualTradeOffer(offer)
+              .then(() => {
+                offer.accept((error7) => {
+                  if (error7) {
+                    log.error(
+                      `An error occurred while accepting trade: ${error7.message}`
+                    );
+                    offer.decline((error8) => {
+                      if (error8) {
+                        log.error(
+                          `An error occurred while accepting trade: ${error8.message}`
+                        );
+                      }
+                    });
+                  }
+                });
+              })
+              .catch((error9) => {
+                log.error(
+                  `An error occurred while accepting trade: ${error9.message}`
+                );
+                offer.decline((error10) => {
+                  if (error10) {
+                    log.error(
+                      `An error occurred while declining trade: ${error10.message}`
+                    );
+                  }
+                });
+              });
           }
-        });
-      } else {
-        offer.decline((error) => {
-          if (error) {
-            log.error(`An error occurred while declining trade: ${error}`);
-          } else {
-            chatMessage(
-              offer.partner,
-              messages.trade.declined.us.replace('{OFFERID}', offer.id)
-            );
-          }
-        });
+        } else {
+          chatMessage(offer.partner, messages.tradeHold);
+          offer.decline((error11) => {
+            if (error11) {
+              log.error(
+                `An error occurred while declining trade: ${error11.message}`
+              );
+            }
+          });
+        }
+      });
+    });
+
+    manager.on('receivedOfferChanged', (offer) => {
+      if (offer.state === 3) {
+        log.tradeoffer(
+          `Manual trade offer has been completed. TradeID:${offer.id}`
+        );
+
+        if (main.admins.includes(offer.partner.getSteamID64())) {
+          chatMessage(offer.partner.getSteamID64(), messages.trade.done[0]);
+        } else {
+          chatMessage(offer.partner.getSteamID64(), messages.trade.done[1]);
+        }
+
+        updateStock(offer);
+      } else if (offer.state === 5) {
+        log.tradeoffer(`Manual trade offer expired. TradeID:${offer.id}`);
+        chatMessage(
+          offer.partner,
+          messages.trade.expired.replace('{OFFERID}', offer.id)
+        );
+      } else if (offer.state === 6) {
+        log.tradeoffer(
+          `Manual trade offer canceled by user. TradeID:${offer.id}`
+        );
+        chatMessage(
+          offer.partner,
+          messages.trade.declined.them.replace('{OFFERID}', offer.id)
+        );
+      } else if (offer.state === 7 || offer.state === 10) {
+        log.tradeoffer(
+          `Manual trade offer declined by bot. TradeID:${offer.id}`
+        );
+        chatMessage(
+          offer.partner,
+          messages.trade.canceled[0].replace('{OFFERID}', offer.id)
+        );
+      } else if (offer.state === 8) {
+        log.tradeoffer(
+          `Manual trade offer canceled by steam (items unavailable). TradeID:${offer.id}`
+        );
+        chatMessage(
+          offer.partner,
+          messages.trade.canceled[1].replace('{OFFERID}', offer.id)
+        );
+      } else if (offer.state === 11) {
+        log.tradeoffer(
+          `Manual trade offer aborted because user is in escrow and can't trade. TradeID:${offer.id}`
+        );
+        chatMessage(
+          offer.partner,
+          messages.trade.escrow.replace('{OFFERID}', offer.id)
+        );
       }
     });
 
-    manager.on('sentOfferChanged', async (offer) => {
+    manager.on('sentOfferChanged', (offer) => {
       if (offer.state === 2) {
         log.tradeoffer(
           `Tradeoffer has been confirmed and is awaiting confirmation from User. TradeID:${offer.id}`
@@ -271,12 +364,6 @@ export default {
         }
 
         updateStock(offer);
-      } else if (offer.state === 4) {
-        log.tradeoffer(`Aborted because of counter offer. TradeID:${offer.id}`);
-        chatMessage(
-          offer.partner,
-          messages.trade.counteroffer.replace('{OFFERID}', offer.id)
-        );
       } else if (offer.state === 5) {
         log.tradeoffer(`Tradeoffer expired. TradeID:${offer.id}`);
         chatMessage(
@@ -322,7 +409,7 @@ export default {
         (error) => {
           if (error) {
             log.error(
-              `An error occurred while accepting confirmation: ${error}`
+              `An error occurred while accepting confirmation: ${error.message}`
             );
           } else {
             log.tradeoffer('Confirmation accepted.');

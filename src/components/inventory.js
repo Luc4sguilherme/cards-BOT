@@ -1,4 +1,5 @@
 import async from 'async';
+import _ from 'lodash';
 import moment from 'moment';
 
 import acceptedCurrencies from '../config/currencies.js';
@@ -93,10 +94,10 @@ export const getBoosterPack = (inventory) => {
 export const getRegularCard = (inventory) => {
   const cards = inventory
     .filter(
-      (item) => item.getTag('item_class').internal_name === 'item_class_2'
+      (item) => item.getTag('item_class')?.internal_name === 'item_class_2'
     )
     .filter(
-      (item) => item.getTag('cardborder').internal_name === 'cardborder_0'
+      (item) => item.getTag('cardborder')?.internal_name === 'cardborder_0'
     );
 
   return cards;
@@ -105,10 +106,10 @@ export const getRegularCard = (inventory) => {
 export const getFoilCard = (inventory) => {
   const cards = inventory
     .filter(
-      (item) => item.getTag('item_class').internal_name === 'item_class_2'
+      (item) => item.getTag('item_class')?.internal_name === 'item_class_2'
     )
     .filter(
-      (item) => item.getTag('cardborder').internal_name === 'cardborder_1'
+      (item) => item.getTag('cardborder')?.internal_name === 'cardborder_1'
     );
 
   return cards;
@@ -355,11 +356,33 @@ export const updateStock = async (offer) => {
     load.push(param);
   }
 
-  if (offer.message.search(/tf|tf2/i) !== -1) {
+  const itemsSent = offer.itemsToGive.map((items) => {
+    if (items.name === 'Gems') {
+      return `753-Gems`;
+    }
+
+    return items.name;
+  });
+
+  const itemsReceived = offer.itemsToReceive.map((items) => {
+    if (items.name === 'Gems') {
+      return `753-Gems`;
+    }
+
+    return items.name;
+  });
+
+  if (
+    _.intersectionBy(acceptedCurrencies.tf, itemsSent).length ||
+    _.intersectionBy(acceptedCurrencies.tf, itemsReceived).length
+  ) {
     add('TF2');
   }
 
-  if (offer.message.search(/gem|gems/i) !== -1) {
+  if (
+    _.intersectionBy(acceptedCurrencies.gems, itemsSent).length ||
+    _.intersectionBy(acceptedCurrencies.gems, itemsReceived).length
+  ) {
     add('GEMS');
   }
 

@@ -1,8 +1,8 @@
+import calculatePrices from '../../../../components/calculatePrices.js';
 import chatMessage from '../../../../components/chatMessage.js';
 import { getUserSteamInventory } from '../../../../components/inventory.js';
 import log from '../../../../components/log.js';
 import messages from '../../../../config/messages.js';
-import prices from '../../../../config/rates.js';
 
 export default async (sender, currency) => {
   try {
@@ -34,34 +34,35 @@ export default async (sender, currency) => {
       items.regularCards.marketable.quantity +=
         regularCards.marketable[i].length;
       items.regularCards.marketable.gems +=
-        prices.gems[i].regularCards.marketable *
+        calculatePrices(i, 'GEMS', 'CARDS', true) *
         regularCards.marketable[i].length;
 
       items.regularCards.nomarketable.quantity +=
         regularCards.nomarketable[i].length;
       items.regularCards.nomarketable.gems +=
-        prices.gems[i].regularCards.nomarketable *
+        calculatePrices(i, 'GEMS', 'CARDS', false) *
         regularCards.nomarketable[i].length;
 
       items.foilCards.marketable.quantity += foilCards.marketable[i].length;
       items.foilCards.marketable.gems +=
-        prices.gems[i].foilCards.marketable * foilCards.marketable[i].length;
+        calculatePrices(i, 'GEMS', 'FOILS', true) *
+        foilCards.marketable[i].length;
 
       items.foilCards.nomarketable.quantity += foilCards.nomarketable[i].length;
       items.foilCards.nomarketable.gems +=
-        prices.gems[i].foilCards.nomarketable *
+        calculatePrices(i, 'GEMS', 'FOILS', false) *
         foilCards.nomarketable[i].length;
 
       items.boosterPacks.marketable.quantity +=
         boosterPacks.marketable[i].length;
       items.boosterPacks.marketable.gems +=
-        prices.gems[i].boosterPacks.marketable *
+        calculatePrices(i, 'GEMS', 'PACKS', true) *
         boosterPacks.marketable[i].length;
 
       items.boosterPacks.nomarketable.quantity +=
         boosterPacks.nomarketable[i].length;
       items.boosterPacks.nomarketable.gems +=
-        prices.gems[i].boosterPacks.nomarketable *
+        calculatePrices(i, 'GEMS', 'PACKS', false) *
         boosterPacks.nomarketable[i].length;
     }
 

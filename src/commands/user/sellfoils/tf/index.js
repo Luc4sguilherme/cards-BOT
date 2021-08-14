@@ -1,14 +1,15 @@
 /* eslint-disable eqeqeq */
+import calculatePrices from '../../../../components/calculatePrices.js';
 import chatMessage from '../../../../components/chatMessage.js';
 import {
   getTF2KeyByAmount,
   getUserSteamInventory,
+  stock,
 } from '../../../../components/inventory.js';
 import log from '../../../../components/log.js';
 import makeOffer from '../../../../components/makeOffer.js';
 import { client } from '../../../../components/steamClient.js';
 import messages from '../../../../config/messages.js';
-import prices from '../../../../config/rates.js';
 
 export default async (sender, currency) => {
   try {
@@ -17,27 +18,37 @@ export default async (sender, currency) => {
 
     const { foilCards } = await getUserSteamInventory(sender.getSteamID64());
     const cards = [];
-    let amountOfKeys = 0;
+    let totalCost = 0;
 
     for (let i = 5; i <= 15; i += 1) {
-      amountOfKeys +=
-        foilCards.marketable[i].length / prices.tf[i].foilCards.marketable;
+      totalCost +=
+        foilCards.marketable[i].length /
+        calculatePrices(i, 'TF2', 'FOILS', true);
 
-      amountOfKeys +=
-        foilCards.nomarketable[i].length / prices.tf[i].foilCards.nomarketable;
+      totalCost +=
+        foilCards.nomarketable[i].length /
+        calculatePrices(i, 'TF2', 'FOILS', false);
     }
 
-    amountOfKeys = Number.parseInt(amountOfKeys, 10);
+    totalCost = Number.parseInt(totalCost, 10);
 
-    let need = amountOfKeys;
+    if (stock.tf.tradable > 0) {
+      if (totalCost > stock.tf.tradable) {
+        totalCost = stock.tf.tradable;
+      }
+    }
+
+    const amountOfKeys = totalCost;
 
     for (let i = 5; i <= 15; i += 1) {
       for (let j = 0; j < foilCards.marketable[i].length; j += 1) {
-        const numberOfDigits = String(prices.tf[i].foilCards.marketable).length;
+        const numberOfDigits = String(
+          calculatePrices(i, 'TF2', 'FOILS', true)
+        ).length;
 
-        if (need.toFixed(numberOfDigits) > 0) {
+        if (totalCost.toFixed(numberOfDigits) > 0) {
           cards.push(foilCards.marketable[i][j]);
-          need -= 1 / prices.tf[i].foilCards.marketable;
+          totalCost -= 1 / calculatePrices(i, 'TF2', 'FOILS', true);
         } else {
           break;
         }
@@ -45,13 +56,13 @@ export default async (sender, currency) => {
 
       for (let j = 0; j < foilCards.nomarketable[i].length; j += 1) {
         const numberOfDigits = String(
-          prices.tf[i].foilCards.nomarketable
+          calculatePrices(i, 'TF2', 'FOILS', false)
         ).length;
 
-        if (need.toFixed(numberOfDigits) > 0) {
+        if (totalCost.toFixed(numberOfDigits) > 0) {
           cards.push(foilCards.nomarketable[i][j]);
 
-          need -= 1 / prices.tf[i].foilCards.nomarketable;
+          totalCost -= 1 / calculatePrices(i, 'TF2', 'FOILS', false);
         } else {
           break;
         }

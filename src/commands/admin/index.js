@@ -1,6 +1,7 @@
 import { isValidCommand } from '../../components/utils.js';
 import authcode from './authcode/index.js';
 import block from './block/index.js';
+import broadcast from './broadcast/index.js';
 import cancel from './cancel/index.js';
 import commands from './commands/index.js';
 import depositCards from './deposit/cards/index.js';
@@ -27,6 +28,8 @@ export default (sender, msg) => {
     authcode(sender);
   } else if (isValidCommand(input, '!BLOCK')) {
     block(sender, msg);
+  } else if (isValidCommand(input, '!BROADCAST')) {
+    broadcast(sender, msg);
   } else if (isValidCommand(input, '!CANCEL')) {
     cancel(sender, msg);
   } else if (isValidCommand(input, '!ADMIN')) {
