@@ -10,7 +10,7 @@ function sendMessageToAdmin(message, id64) {
 }
 
 export default (offer) => {
-  if (offer.data('commandused').search(/SELL/) !== -1) {
+  if (offer.data('commandused')?.search(/SELL/) !== -1) {
     if (offer.data('amountofkeys') > 0) {
       if (offer.data('commandused').search(/ALL/) !== -1) {
         let message = '';
