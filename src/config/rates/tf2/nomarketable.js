@@ -1,6 +1,6 @@
 export default {
   cards: {
-    5: 0, // number of sets you would pay for a key
+    5: 0, // number of cards you would sell a key
     6: 0,
     7: 0,
     8: 0,
@@ -14,7 +14,7 @@ export default {
   },
 
   foils: {
-    5: 0, // number of sets you would pay for a key
+    5: 0, // number of cards you would sell a key
     6: 0,
     7: 0,
     8: 0,

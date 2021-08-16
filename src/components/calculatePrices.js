@@ -65,43 +65,31 @@ export default (numberOfCardsPerSet, currency, type, marketable) => {
   if (currency === 'TF2') {
     if (marketable) {
       if (type === 'FOILS') {
-        return (
-          marketableTF2Rates.foils[numberOfCardsPerSet] * numberOfCardsPerSet
-        );
+        return marketableTF2Rates.foils[numberOfCardsPerSet];
       }
 
       if (type === 'CARDS') {
-        return (
-          marketableTF2Rates.cards[numberOfCardsPerSet] * numberOfCardsPerSet
-        );
+        return marketableTF2Rates.cards[numberOfCardsPerSet];
       }
 
       if (type === 'PACKS') {
         return Number.parseInt(
-          (marketableTF2Rates.cards[numberOfCardsPerSet] *
-            numberOfCardsPerSet) /
-            3,
+          marketableTF2Rates.cards[numberOfCardsPerSet] / 3,
           10
         );
       }
     } else {
       if (type === 'FOILS') {
-        return (
-          noMarketableTF2Rates.foils[numberOfCardsPerSet] * numberOfCardsPerSet
-        );
+        return noMarketableTF2Rates.foils[numberOfCardsPerSet];
       }
 
       if (type === 'CARDS') {
-        return (
-          noMarketableTF2Rates.cards[numberOfCardsPerSet] * numberOfCardsPerSet
-        );
+        return noMarketableTF2Rates.cards[numberOfCardsPerSet];
       }
 
       if (type === 'PACKS') {
         return Number.parseInt(
-          (noMarketableTF2Rates.cards[numberOfCardsPerSet] *
-            numberOfCardsPerSet) /
-            3,
+          noMarketableTF2Rates.cards[numberOfCardsPerSet] / 3,
           10
         );
       }
