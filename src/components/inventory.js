@@ -1,12 +1,11 @@
 import async from 'async';
-import _ from 'lodash';
 import moment from 'moment';
 
 import acceptedCurrencies from '../config/currencies.js';
 import log from './log.js';
 import { playLoading } from './playLoading.js';
 import { playStock } from './playStock.js';
-import { client, community, manager } from './steamClient.js';
+import { client, manager } from './steamClient.js';
 import { readFileAsync } from './utils.js';
 
 export const stock = {
@@ -17,6 +16,18 @@ export const stock = {
   gems: {
     tradable: 0,
     notradable: 0,
+  },
+  foilCards: {
+    marketable: 0,
+    nomarketable: 0,
+  },
+  regularCards: {
+    marketable: 0,
+    nomarketable: 0,
+  },
+  boosterPacks: {
+    marketable: 0,
+    nomarketable: 0,
   },
 };
 
@@ -36,13 +47,13 @@ export const filterCards = async (cards, marketable, size) => {
     .filter((card) => sets[card.market_fee_app] === size);
 };
 
-export const getInventory = (id64, appid, contextid) =>
+export const getInventory = (id64, appid, contextid, tradable = true) =>
   new Promise((resolve, reject) => {
     manager.getUserInventoryContents(
       id64,
       appid,
       contextid,
-      true,
+      tradable,
       (error, inv) => {
         if (error) {
           reject(error);
@@ -53,7 +64,7 @@ export const getInventory = (id64, appid, contextid) =>
     );
   });
 
-export const getTF2key = async (inventory) => {
+export const getTF2key = (inventory) => {
   const keys = [];
 
   for (let i = 0; i < inventory.length; i += 1) {
@@ -65,7 +76,7 @@ export const getTF2key = async (inventory) => {
   return keys;
 };
 
-export const getGems = async (inventory) => {
+export const getGems = (inventory) => {
   const gems = [];
 
   for (let i = 0; i < inventory.length; i += 1) {
@@ -117,7 +128,7 @@ export const getFoilCard = (inventory) => {
 
 export const getTF2KeyByAmount = async (id64, amount) => {
   const inventory = await getInventory(id64, 440, 2);
-  const keys = await getTF2key(inventory);
+  const keys = getTF2key(inventory);
   const keysToSend = [];
 
   if (keys.length < amount) {
@@ -133,7 +144,7 @@ export const getTF2KeyByAmount = async (id64, amount) => {
 
 export const getGemsByAmount = async (id64, amount) => {
   const inventory = await getInventory(id64, 753, 6);
-  const gems = await getGems(inventory);
+  const gems = getGems(inventory);
   const gemsToSend = [];
 
   let amountOfGems = 0;
@@ -155,7 +166,7 @@ export const getGemsByAmount = async (id64, amount) => {
 
 export const getRegularCardsByAmount = async (id64, amount) => {
   const inventory = await getInventory(id64, 753, 6);
-  const cards = await getRegularCard(inventory);
+  const cards = getRegularCard(inventory);
 
   const cardsToSend = [];
 
@@ -172,7 +183,7 @@ export const getRegularCardsByAmount = async (id64, amount) => {
 
 export const getFoilCardsByAmount = async (id64, amount) => {
   const inventory = await getInventory(id64, 753, 6);
-  const cards = await getFoilCard(inventory);
+  const cards = getFoilCard(inventory);
 
   const cardsToSend = [];
 
@@ -189,7 +200,7 @@ export const getFoilCardsByAmount = async (id64, amount) => {
 
 export const getBoosterPackByAmount = async (id64, amount) => {
   const inventory = await getInventory(id64, 753, 6);
-  const packs = await getBoosterPack(inventory);
+  const packs = getBoosterPack(inventory);
 
   const boosterPackToSend = [];
 
@@ -204,64 +215,142 @@ export const getBoosterPackByAmount = async (id64, amount) => {
   return boosterPackToSend;
 };
 
-export const loadTF = (sid) =>
-  new Promise((resolve, reject) => {
-    community.getUserInventoryContents(sid, 440, 2, false, (error, inv) => {
-      if (!error) {
-        stock.tf.tradable = 0;
-        stock.tf.notradable = 0;
-        for (let i = 0; i < inv.length; i += 1) {
-          if (acceptedCurrencies.tf.includes(inv[i].market_hash_name)) {
-            if (inv[i].tradable) {
-              stock.tf.tradable += 1;
-            } else {
-              stock.tf.notradable += 1;
-            }
-          }
-        }
-        log.info(
-          `Bot's TF2 loaded: ${stock.tf.tradable} tradable, ${stock.tf.notradable} notradable.`
-        );
-        resolve();
-      } else {
-        reject(
-          new Error(
-            `An error occurred while getting bot TF2 inventory: ${error}`
-          )
-        );
-      }
-    });
-  });
+export const loadTF = async (sid) => {
+  try {
+    const inventoy = await getInventory(sid, 440, 2, false);
+    const keys = getTF2key(inventoy);
 
-export const loadGems = (sid) =>
-  new Promise((resolve, reject) => {
-    community.getUserInventoryContents(sid, 753, 6, false, (error, inv) => {
-      if (!error) {
-        stock.gems.tradable = 0;
-        stock.gems.notradable = 0;
+    stock.tf.tradable = 0;
+    stock.tf.notradable = 0;
 
-        for (let i = 0; i < inv.length; i += 1) {
-          if (acceptedCurrencies.gems.includes(inv[i].market_hash_name)) {
-            if (inv[i].tradable) {
-              stock.gems.tradable += inv[i].amount;
-            } else {
-              stock.gems.notradable += inv[i].amount;
-            }
-          }
+    for (let i = 0; i < keys.length; i += 1) {
+      if (acceptedCurrencies.tf.includes(keys[i].market_hash_name)) {
+        if (keys[i].tradable) {
+          stock.tf.tradable += 1;
+        } else {
+          stock.tf.notradable += 1;
         }
-        log.info(
-          `Bot's Gems loaded: ${stock.gems.tradable} tradable, ${stock.gems.notradable} notradable.`
-        );
-        resolve();
-      } else {
-        reject(
-          new Error(
-            `An error occurred while getting bot gems inventory: ${error}`
-          )
-        );
       }
-    });
-  });
+    }
+    log.info(
+      `Bot's TF2 loaded: ${stock.tf.tradable} tradable, ${stock.tf.notradable} notradable.`
+    );
+  } catch (error) {
+    throw new Error(
+      `An error occurred while getting bot TF2 inventory: ${error.message}`
+    );
+  }
+};
+
+export const loadGems = async (sid) => {
+  try {
+    const inventoy = await getInventory(sid, 753, 6, false);
+    const gems = await getGems(inventoy);
+
+    stock.gems.tradable = 0;
+    stock.gems.notradable = 0;
+
+    for (let i = 0; i < gems.length; i += 1) {
+      if (acceptedCurrencies.gems.includes(gems[i].market_hash_name)) {
+        if (gems[i].tradable) {
+          stock.gems.tradable += gems[i].amount;
+        } else {
+          stock.gems.notradable += gems[i].amount;
+        }
+      }
+    }
+    log.info(
+      `Bot's Gems loaded: ${stock.gems.tradable} tradable, ${stock.gems.notradable} notradable.`
+    );
+  } catch (error) {
+    throw new Error(
+      `An error occurred while getting bot gems inventory: ${error.message}`
+    );
+  }
+};
+
+export const loadRegularCards = async (sid) => {
+  try {
+    const inventoy = await getInventory(sid, 753, 6, true);
+    const regularCards = await getRegularCard(inventoy);
+
+    stock.regularCards.marketable = 0;
+    stock.regularCards.nomarketable = 0;
+
+    for (let i = 5; i <= 15; i += 1) {
+      const regularCardsMarketable = await filterCards(regularCards, true, i);
+      const regularCardsNoMarketable = await filterCards(
+        regularCards,
+        false,
+        i
+      );
+
+      stock.regularCards.marketable += regularCardsMarketable.length;
+      stock.regularCards.nomarketable += regularCardsNoMarketable.length;
+    }
+    log.info(
+      `Bot's Regular cards loaded: ${stock.regularCards.marketable} marketable, ${stock.regularCards.nomarketable} nomarketable.`
+    );
+  } catch (error) {
+    throw new Error(
+      `An error occurred while getting bot regular cards inventory: ${error.message}`
+    );
+  }
+};
+
+export const loadFoilCard = async (sid) => {
+  try {
+    const inventoy = await getInventory(sid, 753, 6, true);
+    const foilCards = await getFoilCard(inventoy);
+
+    stock.foilCards.marketable = 0;
+    stock.foilCards.nomarketable = 0;
+
+    for (let i = 5; i <= 15; i += 1) {
+      const foilCardsMarketable = await filterCards(foilCards, true, i);
+      const foilCardsNoMarketable = await filterCards(foilCards, false, i);
+
+      stock.foilCards.marketable += foilCardsMarketable.length;
+      stock.foilCards.nomarketable += foilCardsNoMarketable.length;
+    }
+    log.info(
+      `Bot's Foil cards loaded: ${stock.foilCards.marketable} marketable, ${stock.foilCards.nomarketable} nomarketable.`
+    );
+  } catch (error) {
+    throw new Error(
+      `An error occurred while getting bot foil cards inventory: ${error.message}`
+    );
+  }
+};
+
+export const loadPacks = async (sid) => {
+  try {
+    const inventoy = await getInventory(sid, 753, 6, true);
+    const boosterPacks = await getBoosterPack(inventoy);
+
+    stock.boosterPacks.marketable = 0;
+    stock.boosterPacks.nomarketable = 0;
+
+    for (let i = 5; i <= 15; i += 1) {
+      const boosterPacksMarketable = await filterCards(boosterPacks, true, i);
+      const boosterPacksNoMarketable = await filterCards(
+        boosterPacks,
+        false,
+        i
+      );
+
+      stock.boosterPacks.marketable += boosterPacksMarketable.length;
+      stock.boosterPacks.nomarketable += boosterPacksNoMarketable.length;
+    }
+    log.info(
+      `Bot's Booster packs loaded: ${stock.boosterPacks.marketable} marketable, ${stock.boosterPacks.nomarketable} nomarketable.`
+    );
+  } catch (error) {
+    throw new Error(
+      `An error occurred while getting bot booster packs inventory: ${error.message}`
+    );
+  }
+};
 
 export const getUserSteamInventory = async (id64) => {
   const inventory = await getInventory(id64, 753, 6);
@@ -317,6 +406,21 @@ export const loadInventory = async (load) => {
     const sid = client.steamID.getSteamID64();
 
     const Inventory = {
+      REGULARCARDS: async () => {
+        await async.retry({ times: 100, interval: 5000 }, async () => {
+          await loadRegularCards(sid);
+        });
+      },
+      FOILCARDS: async () => {
+        await async.retry({ times: 100, interval: 5000 }, async () => {
+          await loadFoilCard(sid);
+        });
+      },
+      PACKS: async () => {
+        await async.retry({ times: 100, interval: 5000 }, async () => {
+          await loadPacks(sid);
+        });
+      },
       TF2: async () => {
         await async.retry({ times: 100, interval: 5000 }, async () => {
           await loadTF(sid);
@@ -356,34 +460,33 @@ export const updateStock = async (offer) => {
     load.push(param);
   }
 
-  const itemsSent = offer.itemsToGive.map((items) => {
-    if (items.name === 'Gems') {
-      return `753-Gems`;
-    }
+  const itemsSent = offer.itemsToGive;
+  const itemsReceived = offer.itemsToReceive;
 
-    return items.name;
-  });
-
-  const itemsReceived = offer.itemsToReceive.map((items) => {
-    if (items.name === 'Gems') {
-      return `753-Gems`;
-    }
-
-    return items.name;
-  });
-
-  if (
-    _.intersectionBy(acceptedCurrencies.tf, itemsSent).length ||
-    _.intersectionBy(acceptedCurrencies.tf, itemsReceived).length
-  ) {
+  if (getTF2key(itemsSent).length || getTF2key(itemsReceived).length) {
     add('TF2');
   }
 
-  if (
-    _.intersectionBy(acceptedCurrencies.gems, itemsSent).length ||
-    _.intersectionBy(acceptedCurrencies.gems, itemsReceived).length
-  ) {
+  if (getGems(itemsSent).length || getGems(itemsReceived).length) {
     add('GEMS');
+  }
+
+  if (
+    getRegularCard(itemsSent).length ||
+    getRegularCard(itemsReceived).length
+  ) {
+    add('REGULARCARDS');
+  }
+
+  if (getFoilCard(itemsSent).length || getFoilCard(itemsReceived).length) {
+    add('FOILCARDS');
+  }
+
+  if (
+    getBoosterPack(itemsSent).length ||
+    getBoosterPack(itemsReceived).length
+  ) {
+    add('PACKS');
   }
 
   if (load.length !== 0) {

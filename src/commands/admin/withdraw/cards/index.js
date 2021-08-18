@@ -43,6 +43,7 @@ export default async (sender, msg) => {
       cards.length,
       0,
       0,
+      0,
       0
     );
   } catch (error) {

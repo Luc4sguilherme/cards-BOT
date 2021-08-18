@@ -43,12 +43,12 @@ export default {
     notifyAdmin: {
       all: {
         gems: {
-          0: 'Trade completed with {CARDS} Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
-          1: 'Trade completed with {PACKS} Booster Pack(s) and {CARDS} Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
+          0: 'Trade completed with {CARDS} Regular Card(s), {FOILS} Foil Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
+          1: 'Trade completed with {CARDS} Regular Card(s), {FOILS} Foil Card(s) and {PACKS} Booster Pack(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
         },
         tf: {
-          0: 'Trade completed with {CARDS} Card(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
-          1: 'Trade completed with {PACKS} Booster Pack(s) and {CARDS} Card(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
+          0: 'Trade completed with {CARDS} Regular Card(s), {FOILS} Foil Card(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
+          1: 'Trade completed with {CARDS} Regular Card(s), {FOILS} Foil Card(s) and {PACKS} Booster Pack(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
         },
       },
       cards: {
@@ -219,5 +219,11 @@ export default {
   rates:
     'Currently, prices are: \n\n - Regular Cards \n {regular_cards} - Foil Cards \n {foil_cards} - Booster Packs \n {booster_pack}',
 
-  stock: 'I currently have: \n  • {GEMS} Gem(s) \n  • {KEYS} TF2 Key(s) \n',
+  stock:
+    'I currently have: \n' +
+    ' • Regular Card(s): {REGULARCARDS1} marketable, {REGULARCARDS2} non-marketable \n' +
+    ' • Foil Card(s): {FOILCARDS1} marketable, {FOILCARDS2} non-marketable \n' +
+    ' • Booster Pack(s): {PACKS1} marketable, {PACKS2} non-marketable \n' +
+    ' • Gem(s): {GEMS1} tradable, {GEMS2} non-tradable \n' +
+    ' • TF2 Key(s): {KEYS1} tradable, {KEYS2} non-tradable \n',
 };

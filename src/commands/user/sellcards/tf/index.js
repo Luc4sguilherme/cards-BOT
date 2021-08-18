@@ -90,6 +90,7 @@ export default async (sender, currency) => {
       '!SELLCARDS',
       message,
       cards.length,
+      0,
       amountOfKeys,
       0,
       0

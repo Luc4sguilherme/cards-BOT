@@ -23,23 +23,24 @@ export default async (sender, msg) => {
     chatMessage(sender, messages.request);
     log.adminChat(sender.getSteamID64(), `[ !DEPOSITFOILS ${amountOfCards} ]`);
 
-    const cards = await getFoilCardsByAmount(
+    const foils = await getFoilCardsByAmount(
       sender.getSteamID64(),
       amountOfCards
     );
 
     const message = messages.trade.message.cards[0].replace(
       '{CARDS}',
-      cards.length
+      foils.length
     );
 
     await makeOffer(
       sender.getSteamID64(),
       [],
-      cards,
+      foils,
       '!DEPOSITFOILS',
       message,
-      cards.length,
+      0,
+      foils.length,
       0,
       0,
       0

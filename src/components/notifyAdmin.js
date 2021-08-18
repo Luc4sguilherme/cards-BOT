@@ -20,6 +20,7 @@ export default (offer) => {
             .replace('{ID64}', offer.partner.getSteamID64())
             .replace('{KEYS}', offer.data('amountofkeys'))
             .replace('{CARDS}', offer.data('amountofcards'))
+            .replace('{FOILS}', offer.data('amountoffoils'))
             .replace('{PACKS}', offer.data('amountofpacks'))
             .replace('{OFFERID}', offer.id);
         } else {
@@ -27,6 +28,7 @@ export default (offer) => {
             .replace('{ID64}', offer.partner.getSteamID64())
             .replace('{KEYS}', offer.data('amountofkeys'))
             .replace('{CARDS}', offer.data('amountofcards'))
+            .replace('{FOILS}', offer.data('amountoffoils'))
             .replace('{OFFERID}', offer.id);
         }
 
@@ -47,7 +49,7 @@ export default (offer) => {
         const message = messages.trade.notifyAdmin.foils.tf
           .replace('{ID64}', offer.partner.getSteamID64())
           .replace('{KEYS}', offer.data('amountofkeys'))
-          .replace('{FOILS}', offer.data('amountofcards'))
+          .replace('{FOILS}', offer.data('amountoffoils'))
           .replace('{OFFERID}', offer.id);
 
         sendMessageToAdmin(message, offer.partner.getSteamID64());
@@ -73,6 +75,7 @@ export default (offer) => {
             .replace('{ID64}', offer.partner.getSteamID64())
             .replace('{GEMS}', offer.data('amountofgems'))
             .replace('{CARDS}', offer.data('amountofcards'))
+            .replace('{FOILS}', offer.data('amountoffoils'))
             .replace('{PACKS}', offer.data('amountofpacks'))
             .replace('{OFFERID}', offer.id);
         } else {
@@ -80,6 +83,7 @@ export default (offer) => {
             .replace('{ID64}', offer.partner.getSteamID64())
             .replace('{GEMS}', offer.data('amountofgems'))
             .replace('{CARDS}', offer.data('amountofcards'))
+            .replace('{FOILS}', offer.data('amountoffoils'))
             .replace('{OFFERID}', offer.id);
         }
 
@@ -100,7 +104,7 @@ export default (offer) => {
         const message = messages.trade.notifyAdmin.foils.gems
           .replace('{ID64}', offer.partner.getSteamID64())
           .replace('{GEMS}', offer.data('amountofgems'))
-          .replace('{FOILS}', offer.data('amountofcards'))
+          .replace('{FOILS}', offer.data('amountoffoils'))
           .replace('{OFFERID}', offer.id);
 
         sendMessageToAdmin(message, offer.partner.getSteamID64());

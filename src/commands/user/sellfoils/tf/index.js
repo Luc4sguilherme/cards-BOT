@@ -17,7 +17,7 @@ export default async (sender, currency) => {
     chatMessage(sender, messages.request);
 
     const { foilCards } = await getUserSteamInventory(sender.getSteamID64());
-    const cards = [];
+    const foils = [];
     let totalCost = 0;
 
     for (let i = 5; i <= 15; i += 1) {
@@ -47,7 +47,7 @@ export default async (sender, currency) => {
         ).length;
 
         if (totalCost.toFixed(numberOfDigits) > 0) {
-          cards.push(foilCards.marketable[i][j]);
+          foils.push(foilCards.marketable[i][j]);
           totalCost -= 1 / calculatePrices(i, 'TF2', 'FOILS', true);
         } else {
           break;
@@ -60,7 +60,7 @@ export default async (sender, currency) => {
         ).length;
 
         if (totalCost.toFixed(numberOfDigits) > 0) {
-          cards.push(foilCards.nomarketable[i][j]);
+          foils.push(foilCards.nomarketable[i][j]);
 
           totalCost -= 1 / calculatePrices(i, 'TF2', 'FOILS', false);
         } else {
@@ -69,7 +69,7 @@ export default async (sender, currency) => {
       }
     }
 
-    if (amountOfKeys === 0 || cards.length === 0) {
+    if (amountOfKeys === 0 || foils.length === 0) {
       chatMessage(sender.getSteamID64(), messages.error.outofstock.foils.them);
       return;
     }
@@ -80,16 +80,17 @@ export default async (sender, currency) => {
     );
 
     const message = messages.trade.message.cards[2]
-      .replace('{CARDS}', cards.length)
+      .replace('{CARDS}', foils.length)
       .replace('{KEYS}', amountOfKeys);
 
     await makeOffer(
       sender.getSteamID64(),
       [...keys],
-      [...cards],
+      [...foils],
       '!SELLFOILS',
       message,
-      cards.length,
+      0,
+      foils.length,
       amountOfKeys,
       0,
       0

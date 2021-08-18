@@ -89,6 +89,7 @@ export default async (sender, currency) => {
       '!SELLPACKS',
       message,
       0,
+      0,
       amountOfKeys,
       0,
       packs.length

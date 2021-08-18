@@ -42,6 +42,7 @@ export default async (sender, msg) => {
       0,
       0,
       0,
+      0,
       amountOfPacks
     );
   } catch (error) {

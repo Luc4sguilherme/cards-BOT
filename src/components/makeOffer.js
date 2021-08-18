@@ -10,6 +10,7 @@ export default (
   commandused,
   message,
   amountofcards = 0,
+  amountoffoils = 0,
   amountofkeys = 0,
   amountofgems = 0,
   amountofpacks = 0
@@ -26,6 +27,10 @@ export default (
 
     if (amountofcards) {
       offer.data('amountofcards', amountofcards);
+    }
+
+    if (amountoffoils) {
+      offer.data('amountoffoils', amountoffoils);
     }
 
     if (amountofkeys) {

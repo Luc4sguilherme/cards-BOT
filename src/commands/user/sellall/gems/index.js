@@ -19,6 +19,7 @@ export default async (sender, currency) => {
       await getUserSteamInventory(sender.getSteamID64());
 
     const cards = [];
+    const foils = [];
     const packs = [];
     let totalCost = 0;
 
@@ -84,7 +85,7 @@ export default async (sender, currency) => {
         const price = calculatePrices(i, 'GEMS', 'FOILS', true);
 
         if (totalCost >= price) {
-          cards.push(foilCards.marketable[i][j]);
+          foils.push(foilCards.marketable[i][j]);
           totalCost -= price;
           amountOfGems += price;
         } else {
@@ -96,7 +97,7 @@ export default async (sender, currency) => {
         const price = calculatePrices(i, 'GEMS', 'FOILS', false);
 
         if (totalCost >= price) {
-          cards.push(foilCards.nomarketable[i][j]);
+          foils.push(foilCards.nomarketable[i][j]);
           totalCost -= price;
           amountOfGems += price;
         } else {
@@ -129,7 +130,7 @@ export default async (sender, currency) => {
       }
     }
 
-    if (cards.length === 0 && packs.length === 0) {
+    if (cards.length === 0 && foils.length === 0 && packs.length === 0) {
       chatMessage(
         sender.getSteamID64(),
         messages.error.outofstock.anything.them
@@ -150,10 +151,11 @@ export default async (sender, currency) => {
     await makeOffer(
       sender.getSteamID64(),
       [...gems],
-      [...cards, ...packs],
+      [...cards, ...foils, ...packs],
       '!SELLALL',
       message,
       cards.length,
+      foils.length,
       0,
       amountOfGems,
       packs.length

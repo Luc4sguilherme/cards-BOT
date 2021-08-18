@@ -36,6 +36,7 @@ export default async (sender, msg) => {
       message,
       0,
       0,
+      0,
       amountOfGems,
       0
     );

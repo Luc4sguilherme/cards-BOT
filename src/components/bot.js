@@ -57,7 +57,13 @@ export default {
         main.identitySecret
       );
 
-      await loadInventory(['TF2', 'GEMS']);
+      await loadInventory([
+        'REGULARCARDS',
+        'FOILCARDS',
+        'PACKS',
+        'TF2',
+        'GEMS',
+      ]);
       await acceptFriendRequests();
       refuseGroupInvites();
     });

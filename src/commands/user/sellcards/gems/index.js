@@ -84,6 +84,7 @@ export default async (sender, currency) => {
       message,
       cards.length,
       0,
+      0,
       amountOfGems,
       0
     );

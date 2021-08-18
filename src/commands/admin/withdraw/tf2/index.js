@@ -35,6 +35,7 @@ export default async (sender, msg) => {
       '!WITHDRAWTF',
       message,
       0,
+      0,
       amountOfKeys,
       0,
       0
