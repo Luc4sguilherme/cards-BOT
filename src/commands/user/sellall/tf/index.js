@@ -62,81 +62,75 @@ export default async (sender, currency) => {
 
     for (let i = 5; i <= 15; i += 1) {
       for (let j = 0; j < regularCards.marketable[i].length; j += 1) {
-        const numberOfDigits = String(
-          calculatePrices(i, 'TF2', 'CARDS', true)
-        ).length;
+        const price = calculatePrices(i, 'TF2', 'CARDS', true);
+        const numberOfDigits = String(price).length;
 
         if (totalCost.toFixed(numberOfDigits) > 0) {
           cards.push(regularCards.marketable[i][j]);
-          totalCost -= 1 / calculatePrices(i, 'TF2', 'CARDS', true);
+          totalCost -= 1 / price;
         } else {
           break;
         }
       }
 
       for (let j = 0; j < regularCards.nomarketable[i].length; j += 1) {
-        const numberOfDigits = String(
-          calculatePrices(i, 'TF2', 'CARDS', false)
-        ).length;
+        const price = calculatePrices(i, 'TF2', 'CARDS', false);
+        const numberOfDigits = String(price).length;
 
         if (totalCost.toFixed(numberOfDigits) > 0) {
           cards.push(regularCards.nomarketable[i][j]);
 
-          totalCost -= 1 / calculatePrices(i, 'TF2', 'CARDS', false);
+          totalCost -= 1 / price;
         } else {
           break;
         }
       }
 
       for (let j = 0; j < foilCards.marketable[i].length; j += 1) {
-        const numberOfDigits = String(
-          calculatePrices(i, 'TF2', 'FOILS', false)
-        ).length;
+        const price = calculatePrices(i, 'TF2', 'FOILS', true);
+        const numberOfDigits = String(price).length;
 
         if (totalCost.toFixed(numberOfDigits) > 0) {
           foils.push(foilCards.marketable[i][j]);
-          totalCost -= 1 / calculatePrices(i, 'TF2', 'FOILS', false);
+          totalCost -= 1 / price;
         } else {
           break;
         }
       }
 
       for (let j = 0; j < foilCards.nomarketable[i].length; j += 1) {
-        const numberOfDigits = String(
-          calculatePrices(i, 'TF2', 'FOILS', false)
-        ).length;
+        const price = calculatePrices(i, 'TF2', 'FOILS', false);
+        const numberOfDigits = String(price).length;
 
         if (totalCost.toFixed(numberOfDigits) > 0) {
           foils.push(foilCards.nomarketable[i][j]);
 
-          totalCost -= 1 / calculatePrices(i, 'TF2', 'FOILS', false);
+          totalCost -= 1 / price;
         } else {
           break;
         }
       }
 
       for (let j = 0; j < boosterPacks.marketable[i].length; j += 1) {
-        const numLength = String(
-          calculatePrices(i, 'TF2', 'PACKS', true)
-        ).length;
+        const price = calculatePrices(i, 'TF2', 'PACKS', true);
+        const numLength = String(price).length;
 
         if (totalCost.toFixed(numLength) > 0) {
           packs.push(boosterPacks.marketable[i][j]);
-          totalCost -= 1 / calculatePrices(i, 'TF2', 'PACKS', true);
+          totalCost -= 1 / price;
         } else {
           break;
         }
       }
 
       for (let j = 0; j < boosterPacks.nomarketable[i].length; j += 1) {
-        const numLength = String(
-          calculatePrices(i, 'TF2', 'PACKS', false)
-        ).length;
+        const price = calculatePrices(i, 'TF2', 'PACKS', false);
+        const numLength = String(price).length;
 
         if (totalCost.toFixed(numLength) > 0) {
           packs.push(boosterPacks.nomarketable[i][j]);
 
-          totalCost -= 1 / calculatePrices(i, 'TF2', 'PACKS', false);
+          totalCost -= 1 / price;
         } else {
           break;
         }

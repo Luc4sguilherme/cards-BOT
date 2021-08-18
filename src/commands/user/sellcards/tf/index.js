@@ -42,27 +42,25 @@ export default async (sender, currency) => {
 
     for (let i = 5; i <= 15; i += 1) {
       for (let j = 0; j < regularCards.marketable[i].length; j += 1) {
-        const numberOfDigits = String(
-          calculatePrices(i, 'TF2', 'CARDS', true)
-        ).length;
+        const price = calculatePrices(i, 'TF2', 'CARDS', true);
+        const numberOfDigits = String(price).length;
 
         if (totalCost.toFixed(numberOfDigits) > 0) {
           cards.push(regularCards.marketable[i][j]);
-          totalCost -= 1 / calculatePrices(i, 'TF2', 'CARDS', true);
+          totalCost -= 1 / price;
         } else {
           break;
         }
       }
 
       for (let j = 0; j < regularCards.nomarketable[i].length; j += 1) {
-        const numberOfDigits = String(
-          calculatePrices(i, 'TF2', 'CARDS', false)
-        ).length;
+        const price = calculatePrices(i, 'TF2', 'CARDS', false);
+        const numberOfDigits = String(price).length;
 
         if (totalCost.toFixed(numberOfDigits) > 0) {
           cards.push(regularCards.nomarketable[i][j]);
 
-          totalCost -= 1 / calculatePrices(i, 'TF2', 'CARDS', false);
+          totalCost -= 1 / price;
         } else {
           break;
         }
