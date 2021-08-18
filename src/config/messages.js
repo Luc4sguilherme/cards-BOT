@@ -42,14 +42,8 @@ export default {
     },
     notifyAdmin: {
       all: {
-        gems: {
-          0: 'Trade completed with {CARDS} Regular Card(s), {FOILS} Foil Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
-          1: 'Trade completed with {CARDS} Regular Card(s), {FOILS} Foil Card(s) and {PACKS} Booster Pack(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
-        },
-        tf: {
-          0: 'Trade completed with {CARDS} Regular Card(s), {FOILS} Foil Card(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
-          1: 'Trade completed with {CARDS} Regular Card(s), {FOILS} Foil Card(s) and {PACKS} Booster Pack(s) received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
-        },
+        gems: 'Trade completed with {ITEMS} received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',
+        tf: 'Trade completed with {ITEMS} received and {KEYS} TF2 key(s) sent. TradeID: {OFFERID}',
       },
       cards: {
         gems: 'Trade completed with {CARDS} Regular Card(s) received and {GEMS} Gem(s) sent. TradeID: {OFFERID}',

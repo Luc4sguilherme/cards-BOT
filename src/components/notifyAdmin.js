@@ -14,23 +14,27 @@ export default (offer) => {
     if (offer.data('amountofkeys') > 0) {
       if (offer.data('commandused').search(/ALL/) !== -1) {
         let message = '';
+        let items = '';
+
+        if (offer.data('amountofcards')) {
+          items += `${offer.data('amountofcards')} Regular Card(s) `;
+        }
+
+        if (offer.data('amountoffoils')) {
+          items += `${offer.data('amountoffoils')} Foil Card(s) `;
+        }
 
         if (offer.data('amountofpacks')) {
-          message = messages.trade.notifyAdmin.all.tf[1]
-            .replace('{ID64}', offer.partner.getSteamID64())
-            .replace('{KEYS}', offer.data('amountofkeys'))
-            .replace('{CARDS}', offer.data('amountofcards'))
-            .replace('{FOILS}', offer.data('amountoffoils'))
-            .replace('{PACKS}', offer.data('amountofpacks'))
-            .replace('{OFFERID}', offer.id);
-        } else {
-          message = messages.trade.notifyAdmin.all.tf[0]
-            .replace('{ID64}', offer.partner.getSteamID64())
-            .replace('{KEYS}', offer.data('amountofkeys'))
-            .replace('{CARDS}', offer.data('amountofcards'))
-            .replace('{FOILS}', offer.data('amountoffoils'))
-            .replace('{OFFERID}', offer.id);
+          items += `${offer.data('amountofpacks')} Booster Pack(s) `;
         }
+
+        message = messages.trade.notifyAdmin.all.tf
+          .replace('{ID64}', offer.partner.getSteamID64())
+          .replace('{KEYS}', offer.data('amountofkeys'))
+          .replace('{ITEMS}', items)
+          .replace('{OFFERID}', offer.id)
+          .replace(/ {2}/g, ' ')
+          .replace(/d\(s\) (?!r)/g, 'd(s), ');
 
         sendMessageToAdmin(message, offer.partner.getSteamID64());
       }
@@ -69,23 +73,27 @@ export default (offer) => {
     if (offer.data('amountofgems') > 0) {
       if (offer.data('commandused').search(/ALL/) !== -1) {
         let message = '';
+        let items = '';
+
+        if (offer.data('amountofcards')) {
+          items += `${offer.data('amountofcards')} Regular Card(s) `;
+        }
+
+        if (offer.data('amountoffoils')) {
+          items += `${offer.data('amountoffoils')} Foil Card(s) `;
+        }
 
         if (offer.data('amountofpacks')) {
-          message = messages.trade.notifyAdmin.all.gems[1]
-            .replace('{ID64}', offer.partner.getSteamID64())
-            .replace('{GEMS}', offer.data('amountofgems'))
-            .replace('{CARDS}', offer.data('amountofcards'))
-            .replace('{FOILS}', offer.data('amountoffoils'))
-            .replace('{PACKS}', offer.data('amountofpacks'))
-            .replace('{OFFERID}', offer.id);
-        } else {
-          message = messages.trade.notifyAdmin.all.gems[0]
-            .replace('{ID64}', offer.partner.getSteamID64())
-            .replace('{GEMS}', offer.data('amountofgems'))
-            .replace('{CARDS}', offer.data('amountofcards'))
-            .replace('{FOILS}', offer.data('amountoffoils'))
-            .replace('{OFFERID}', offer.id);
+          items += `${offer.data('amountofpacks')} Booster Pack(s) `;
         }
+
+        message = messages.trade.notifyAdmin.all.gems
+          .replace('{ID64}', offer.partner.getSteamID64())
+          .replace('{GEMS}', offer.data('amountofgems'))
+          .replace('{ITEMS}', items)
+          .replace('{OFFERID}', offer.id)
+          .replace(/ {2}/g, ' ')
+          .replace(/d\(s\) (?!r)/g, 'd(s), ');
 
         sendMessageToAdmin(message, offer.partner.getSteamID64());
       }
