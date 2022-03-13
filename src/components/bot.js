@@ -68,6 +68,14 @@ export default {
       refuseGroupInvites();
     });
 
+    community.on('sessionExpired', (error) => {
+      if (error) {
+        log.error(error);
+      }
+    
+      client.webLogOn();
+    });
+
     client.on('error', (error) => {
       const minutes = 25;
       const seconds = 5;
